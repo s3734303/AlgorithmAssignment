@@ -45,17 +45,13 @@ public class BstMultiset extends RmitMultiset
         if(newNode.getSet().equals(node.getSet())){
             node.instance++;
         }
-
         else if(order<0){
             node.setLeft(addNode(node.LeftNode(),newNode));
         }
-        else{
+        else if(order>0){
             node.setRight(addNode(node.RightNode(),newNode));
         }
-        if(newNode.left!=null)
-            addNode(node,newNode.left);
-        if(newNode.right!=null)
-            addNode(node,newNode.right);
+
         return node;
     }
     Tree root;
@@ -82,6 +78,15 @@ public class BstMultiset extends RmitMultiset
         while(node.RightNode()!=null)
             node = node.RightNode();
         return node;
+    }
+
+    public BstMultiset addTree(BstMultiset origin,Tree adder){
+        if(adder!=null){
+            addTree(origin,adder.left);
+            origin.add(adder.item);
+            addTree(origin,adder.right);
+        }
+        return origin;
     }
 
     public Tree removeNode(Tree deleteNode,Tree root){
@@ -234,7 +239,7 @@ public class BstMultiset extends RmitMultiset
         BstMultiset multiset = new BstMultiset();
         multiset.root=clone(root);
         Tree branch = clone(((BstMultiset)other).root);
-        multiset.root = addNode(multiset.root,branch);
+        multiset=addTree(multiset,branch);
         return multiset;
     } // end of union()
 
