@@ -24,5 +24,7 @@ public class Node {
 	public void setNext(Node nextNode) {
 		next = nextNode;
 	}
+
+	public boolean hasNext(){return next!=null;}
 	
 }
