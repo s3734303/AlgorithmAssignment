@@ -152,20 +152,14 @@ public class BstMultiset extends RmitMultiset
         return set1;
     }
 
-    public BstMultiset common(Tree root,BstMultiset set,BstMultiset out){
-        if(root !=null){
-            common(root.left,set,out);
+    public BstMultiset common(Tree root,BstMultiset set,Tree setRoot,BstMultiset out){
+        if(root!=null){
+            common(root.left,set,setRoot,out);
             if(set.contains(root.item)){
-                int t;
-                if(root.instance<set.search(root.item))
-                    t=root.instance;
-                else
-                    t= set.search(root.item);
-                for(int i=0;i<t;i++)
+                for(int i=0;i<Math.min(root.instance,set.searchNode(setRoot,root.item).instance);i++)
                     out.add(root.item);
             }
-
-            common(root.right,set,out);
+            common(root.right,set,setRoot,out);
         }
         return out;
     }
@@ -196,7 +190,7 @@ public class BstMultiset extends RmitMultiset
         list = new MyList();
         order(root,1,instanceCount,null,null);
         return list;
-    } // end of searchByInstance    
+    } // end of searchByInstance
 
 
     @Override
@@ -208,9 +202,12 @@ public class BstMultiset extends RmitMultiset
     @Override
 	public void removeOne(String item) {
         Tree target =searchNode(root,item);
-        target.instance--;
-        if(target.instance<1)
-            removeNode(target,root);
+        if(target!=null){
+            target.instance--;
+            if(target.instance<1)
+                removeNode(target,root);
+        }
+
 
     } // end of removeOne()
 
@@ -247,7 +244,7 @@ public class BstMultiset extends RmitMultiset
     @Override
 	public RmitMultiset intersect(RmitMultiset other) {
         BstMultiset multiset = new BstMultiset();
-        multiset= common(root, (BstMultiset) other,multiset);
+        multiset= common(root, (BstMultiset) other, ((BstMultiset) other).root,multiset);
         return multiset;
     } // end of intersect()
 
