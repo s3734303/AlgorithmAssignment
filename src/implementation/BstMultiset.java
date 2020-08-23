@@ -33,7 +33,9 @@ public class BstMultiset extends RmitMultiset
         public Tree RightNode(){
             return right;
         }
-        public boolean hasLeaf(){if(left!=null || right!=null)return true; return false;}
+        public boolean hasLeaf(){
+            return left != null || right != null;
+        }
     }
 
     public Tree addNode(Tree node, Tree newNode){
@@ -199,9 +201,7 @@ public class BstMultiset extends RmitMultiset
 
     @Override
 	public boolean contains(String item) {
-        if(searchNode(root,item)==null)
-            return false;
-        return true;
+        return searchNode(root, item) != null;
     } // end of contains()
 
 
