@@ -36,13 +36,11 @@ public class MyList implements java.util.List {
 	
 	@Override
 	public boolean contains(Object o) {
-    	if (list != null) {
-			for (int i = 0; i < numOfElements; i++) {
-				if (list[i].equals(o)) {
-					return true;
-				}
+		for (int i = 0; i < numOfElements; i++) {
+			if (list[i].equals(o)) {
+				return true;
 			}
-    	}
+		}
 		return false;
 	}
 	
