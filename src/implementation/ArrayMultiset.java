@@ -35,11 +35,9 @@ public class ArrayMultiset extends RmitMultiset
     @Override
 	public int search(String elem) {
     	int numOfInstance = 0;
-    	if (array != null) {
-    		for (int i = 0; i < arraySize; i++) {
-    			if (array[i].equals(elem)) {
-    				numOfInstance++;
-    			}
+    	for (int i = 0; i < arraySize; i++) {
+    		if (array[i].equals(elem)) {
+    			numOfInstance++;
     		}
     	}
     	if (numOfInstance == 0) {
@@ -59,17 +57,15 @@ public class ArrayMultiset extends RmitMultiset
     		}
     	}
     	return instances;
-    } // end of searchByInstance
+    } // end of searchByInstance()
 
 
     @Override
 	public boolean contains(String elem) {
-    	if (array != null) {
-    		for (int i = 0; i < array.length; i++) {
+    		for (int i = 0; i < arraySize; i++) {
     			if (array[i].equals(elem)) {
     				return true;
     			}
-    		}
     	}
     	return false;
     } // end of contains()
