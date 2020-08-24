@@ -87,7 +87,7 @@ public class ArrayMultiset extends RmitMultiset
     	String[] newList = new String[arraySize - 1];
     	boolean removed = false;
     	
-    	if (array != null && contains(elem)) {
+    	if (contains(elem)) {
     		for (int i = 0; i < arraySize; i++) {
     			if (!array[i].equals(elem) && !removed) {
     				newList[i] = array[i];
