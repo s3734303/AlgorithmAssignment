@@ -21,12 +21,6 @@ public class ArrayMultiset extends RmitMultiset
 
 	@Override
 	public void add(String elem) {
-    	if (array == null) {
-    		array = new String[1];
-    		array[0] = elem;
-    		arraySize++;
-    	}
-    	else {
     		String newArray[] = new String[arraySize + 1];
     		for (int i = 0; i < arraySize; i++) {
     			newArray[i] = array[i];
