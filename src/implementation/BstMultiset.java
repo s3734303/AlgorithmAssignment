@@ -91,6 +91,21 @@ public class BstMultiset extends RmitMultiset
         return origin;
     }
 
+    public void sorting(Tree original){
+        if(original==null)
+            return;
+        if(root!=null)
+            sorting(original.left);
+        if(root==null){
+            root=new Tree(original.item);
+            root.instance= original.instance;
+        }else
+            root = addNode(root,original);
+
+        sorting(original.right);
+
+    }
+
     public Tree removeNode(Tree deleteNode,Tree root){
         if(root==null)
             return null;
@@ -163,14 +178,14 @@ public class BstMultiset extends RmitMultiset
         }
         return out;
     }
-
+    List<Tree> printSort;
     public void order(Tree node,int func,int instanceCount,String lower,String upper){
         if(node ==null)
             return;
         order(node.left,func,instanceCount,lower,upper);
         switch (func){
             case(0)://print
-                stringBuilder.append(node.item+":"+node.instance+"\n");
+                printSort.add(node);
                 break;
             case(1)://searchByInstance
                 if(instanceCount==node.instance)
@@ -205,7 +220,7 @@ public class BstMultiset extends RmitMultiset
         if(target!=null){
             target.instance--;
             if(target.instance<1)
-                removeNode(target,root);
+                root =removeNode(target,root);
         }
 
 
@@ -214,10 +229,23 @@ public class BstMultiset extends RmitMultiset
 
     @Override
 	public String print() {
-        order(root,0,-1,null,null);
-        String str = stringBuilder.toString();
         stringBuilder = new StringBuilder();
-        return str;
+        printSort= new MyList();
+        order(root,0,-1,null,null);
+        for(int i=0;i<printSort.size()-1;i++)
+            for(int j=0;j<printSort.size()-i-1;j++)
+                if(printSort.get(j).instance<printSort.get(j+1).instance)
+                {
+                    Tree temp = new Tree(printSort.get(j).item);
+                    temp.instance = printSort.get(j).instance;
+                    printSort.set(j,printSort.get(j+1));
+                    printSort.set(j+1,temp);
+                }
+        for(Tree t : printSort)
+            stringBuilder.append(t.item+":"+t.instance+"\n");
+
+
+        return stringBuilder.toString();
     } // end of OrderedPrint
 
 

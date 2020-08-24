@@ -97,11 +97,8 @@ public class DualLinkedListMultiset extends RmitMultiset
         }
         if(b){
             header0.setNext(new InstanceNode(item));
-            size++;
         }
         sorting();
-
-
     } // end of add()
 
 
@@ -213,24 +210,12 @@ public class DualLinkedListMultiset extends RmitMultiset
 
     @Override
 	public String printRange(String lower, String upper) {
-        Node header = ascendantNode;
-        int counter = 1;
+        InstanceNode header = instanceNode;
         stringBuilder = new StringBuilder();
-        if(!ascendantNode.hasNext())
-            stringBuilder.append(header.getData()+":"+counter+"\n");
-        else{
-            while (header.hasNext()){
-                if(header.getData().compareTo(lower)>=0 && header.getData().compareTo(upper)<=0 ){
-                    while (header.getData().equals(header.getNext().getData())){
-
-                        counter++;
-                        header=header.getNext();
-                    }
-                    stringBuilder.append(header.getData()+":"+counter+"\n");
-                    counter=1;
-                }
-                header= header.getNext();
-            }
+        while (header!=null){
+            if(header.getData().compareTo(lower)>=0 && header.getData().compareTo(upper)<=0 )
+                stringBuilder.append(header.getData()+":"+header.instance+"\n");
+            header= header.getNext();
         }
         return stringBuilder.toString();
     } // end of printRange()
