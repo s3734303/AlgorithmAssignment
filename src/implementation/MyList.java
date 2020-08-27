@@ -7,12 +7,12 @@ import java.util.ListIterator;
 
 @SuppressWarnings({ "rawtypes" })
 public class MyList implements java.util.List {
-	private static final int DEFAULT_SIZE = 1;
+	
 	private Object[] list;
 	private int numOfElements;  // to keep track of number of instances in this list
 
 	MyList() {
-		list = new Object[DEFAULT_SIZE];
+		list = null;
 		numOfElements = 0;
 	}
 	
@@ -36,13 +36,11 @@ public class MyList implements java.util.List {
 	
 	@Override
 	public boolean contains(Object o) {
-    	if (list != null) {
-			for (int i = 0; i < numOfElements; i++) {
-				if (list[i].equals(o)) {
-					return true;
-				}
+		for (int i = 0; i < numOfElements; i++) {
+			if (list[i].equals(o)) {
+				return true;
 			}
-    	}
+		}
 		return false;
 	}
 	
@@ -61,16 +59,6 @@ public class MyList implements java.util.List {
 		Object previous = list[index];
 		list[index] = element;
 		return previous;
-	}
-	
-	@Override
-	public boolean isEmpty() {
-		for (int i = 0; i < numOfElements; i++) {
-			if (list[i] != null) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 
@@ -109,13 +97,13 @@ public class MyList implements java.util.List {
         }
 	}
 	
-	public String toStringInOrder(RmitMultiset RmitMultiset) {
+	public String toStringInOrder(RmitMultiset rmitMultiset) {
 		String elements = "";
 
 		// searchByInstance() and put into string
         MyList strSameFreq = new MyList();
     	for (int i = 0; i < numOfElements; i++) {
-    		strSameFreq = (MyList) RmitMultiset.searchByInstance((int)list[i]);
+    		strSameFreq = (MyList) rmitMultiset.searchByInstance((int)list[i]);
     		for (int j = 0; j < strSameFreq.size(); j++) {
     			elements += strSameFreq.get(j) + ":" + list[i] + "\n";
     		}
@@ -124,6 +112,18 @@ public class MyList implements java.util.List {
         return elements;
 	}
 	
+	
+	@Override
+	public boolean isEmpty() {
+		return false;
+//		for (int i = 0; i < numOfElements; i++) {
+//			if (list[i] != null) {
+//				return false;
+//			}
+//		}
+//		return true;
+	}
+	 
 	@Override
 	public Object[] toArray() {
 		// TODO Auto-generated method stub
