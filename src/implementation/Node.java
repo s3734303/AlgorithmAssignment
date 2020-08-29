@@ -8,7 +8,7 @@ public class Node {
 	public Node(String data) {
 		this.data = data;
 		next = null;
-		numOfInstance = 0;
+		numOfInstance = 1;
 	}
 
 	public String getData() {
