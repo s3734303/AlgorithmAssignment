@@ -48,7 +48,7 @@ public class ArrayMultiset extends RmitMultiset {
 				return array[i].getNumOfInstance();
 			}
 		}
-		return 0;
+		return searchFailed;
 	} // end of search()
 
 	@SuppressWarnings("unchecked")
