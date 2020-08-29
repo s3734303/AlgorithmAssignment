@@ -19,19 +19,23 @@ public class ArrayMultiset extends RmitMultiset {
 
 	@Override
 	public void add(String elem) {
+		if (!contains(elem)) {
+			Node newArray[] = new Node[arraySize + 1];
+			Node newNode = new Node(elem);
 
-		for (int i = 0; i < arraySize; i++) {
-			if (array[i].getData().equals(elem)) {
-				array[i].instanceIncrement();
-			} else {
-				Node newArray[] = new Node[arraySize++];
-				for (int j = 0; i < arraySize; i++) {
-					newArray[i] = array[i];
+			for (int j = 0; j < arraySize; j++) {
+				newArray[j] = array[j];
+			}
+
+			newArray[arraySize] = newNode;
+
+			arraySize++;
+			array = newArray;
+		} else {
+			for (int i = 0; i < arraySize; i++) {
+				if (array[i].getData().equals(elem)) {
+					array[i].instanceIncrement();
 				}
-				newArray[arraySize] = new Node(elem);
-
-				arraySize++;
-				array = newArray;
 			}
 		}
 
@@ -53,7 +57,7 @@ public class ArrayMultiset extends RmitMultiset {
 		MyList instances = new MyList();
 		for (int i = 0; i < arraySize; i++) {
 			if (search(array[i].getData()) == instanceCount) {
-				instances.add(array[i]);
+				instances.add(array[i].getData());
 			}
 		}
 		return instances;
@@ -73,9 +77,11 @@ public class ArrayMultiset extends RmitMultiset {
 	// Only remove one of them
 	public void removeOne(String elem) {
 		for (int i = 0; i < arraySize; i++) {
-			if (array[i].getData().contentEquals(elem)) {
+			if (array[i].getData().equals(elem)) {
 				if (array[i].getNumOfInstance() > 1) {
 					array[i].instanceDecrement();
+					arraySize--;
+					return;
 				}
 				// if only one instance of elem left, remove the node from array
 				else if (array[i].getNumOfInstance() == 1) {
@@ -104,12 +110,12 @@ public class ArrayMultiset extends RmitMultiset {
 
 		// sort nodes
 		for (int i = 0; i < arraySize - 1; i++) {
-			for (int j = 0; i < arraySize - i - 1; j++) {
-				if (array[j].getNumOfInstance() < array[j++].getNumOfInstance()) {
+			for (int j = 0; j < arraySize - i - 1; j++) {
+				if (array[j].getNumOfInstance() < array[j + 1].getNumOfInstance()) {
 					// swap
 					Node temp = array[j];
-					array[j] = array[j++];
-					array[j++] = temp;
+					array[j] = array[j + 1];
+					array[j + 1] = temp;
 				}
 			}
 		}
@@ -140,12 +146,16 @@ public class ArrayMultiset extends RmitMultiset {
 		ArrayMultiset sum = new ArrayMultiset();
 
 		for (int i = 0; i < arraySize; i++) {
-			sum.add(array[i].getData());
+			Node currNode = array[i];
+			sum.add(currNode.getData());
+			sum.setNumOfInstance(currNode.getData(), currNode.getNumOfInstance());
 		}
 
-		
 		for (int i = 0; i < ((ArrayMultiset) other).getSize(); i++) {
-			sum.add(((ArrayMultiset) other).get(i).getData());
+			Node currNode = ((ArrayMultiset) other).get(i);
+			sum.add(currNode.getData());
+			sum.setNumOfInstance(currNode.getData(), sum.search(currNode.getData()) + currNode.getNumOfInstance() - 1);
+
 		}
 
 		return sum;
@@ -157,19 +167,13 @@ public class ArrayMultiset extends RmitMultiset {
 
 		for (int i = 0; i < arraySize; i++) {
 			if (other.contains(array[i].getData())) {
-				int intersectInstance;
-				if (array[i].getNumOfInstance() > other.search(array[i].getData())) {
-					intersectInstance = other.search(array[i].getData());
-				} else {
-					intersectInstance = array[i].getNumOfInstance();
-				}
+				int intersectInstance = min(array[i].getNumOfInstance(), other.search(array[i].getData()));
 				intersect.add(array[i].getData());
 				if (intersectInstance > 1) {
 					intersect.setNumOfInstance(array[i].getData(), intersectInstance);
 				}
 			}
 		}
-
 		return intersect;
 	} // end of intersect()
 
@@ -178,14 +182,19 @@ public class ArrayMultiset extends RmitMultiset {
 		ArrayMultiset difference = new ArrayMultiset();
 
 		for (int i = 0; i < arraySize; i++) {
-			if (other.contains(array[i].getData())) {
-				int diffInstance = abs(array[i].getNumOfInstance() - other.search(array[i].getData()));
-				if (diffInstance != 0) {
-					difference.add(array[i].getData());
+			Node currNode = array[i];
+			if (other.contains(currNode.getData())) {
+				int diffInstance = currNode.getNumOfInstance() - other.search(currNode.getData());
+				if (diffInstance > 0) {
+					difference.add(currNode.getData());
+					if (diffInstance > 1) {
+						difference.setNumOfInstance(currNode.getData(), diffInstance);
+					}
 				}
-				if (diffInstance > 1) {
-					difference.setNumOfInstance(array[i].getData(), diffInstance);
-				}
+
+			} else {
+				difference.add(currNode.getData());
+				difference.setNumOfInstance(currNode.getData(), currNode.getNumOfInstance());
 			}
 		}
 		return difference;
@@ -199,19 +208,18 @@ public class ArrayMultiset extends RmitMultiset {
 		return array[index];
 	}
 
-
-	private int abs(int num) {
-		if (num < 0) {
-			return -num;
-		}
-		return num;
-	}
-
 	private void setNumOfInstance(String elem, int numOfInstance) {
 		for (int i = 0; i < arraySize; i++) {
-			if (array[i].getData().contentEquals(elem)) {
+			if (array[i].getData().equals(elem)) {
 				array[i].setNumOfInstance(numOfInstance);
 			}
 		}
+	}
+
+	private int min(int int1, int int2) {
+		if (int1 > int2) {
+			return int2;
+		}
+		return int1;
 	}
 } // end of class ArrayMultiset
