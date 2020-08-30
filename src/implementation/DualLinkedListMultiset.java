@@ -2,9 +2,10 @@ package implementation;
 
 import java.util.List;
 
+
 /**
  * Dual linked list implementation of a multiset.  See comments in RmitMultiset to
- * understand what each overriden method is meant to do.
+ * understand what each overridden method is meant to do.
  *
  * @author Jeffrey Chan & Yongli Ren, RMIT 2020
  */
@@ -33,6 +34,7 @@ public class DualLinkedListMultiset extends RmitMultiset
 
     @Override
 	public void add(String item) {
+
         if(ascendantNode == null){
             ascendantNode = new Node(item);
             instanceNode = new Node(item);
@@ -120,15 +122,14 @@ public class DualLinkedListMultiset extends RmitMultiset
 
     @Override
 	public int search(String item) {
-        Node header = (Node) find(instanceNode,item);
+        Node header = find(instanceNode,item);
         if(header==null)
             return searchFailed;
         return header.getNumOfInstance();
     } // end of search()
 
-
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
 	public List<String> searchByInstance(int instanceCount) {
         Node header = instanceNode;
         List<String> list = new MyList();

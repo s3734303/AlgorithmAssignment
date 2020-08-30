@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * BST implementation of a multiset.  See comments in RmitMultiset to
- * understand what each overriden method is meant to do.
+ * understand what each overridden method is meant to do.
  *
  * @author Jeffrey Chan & Yongli Ren, RMIT 2020
  */
@@ -12,7 +12,7 @@ public class BstMultiset extends RmitMultiset
 {
 
 
-    public class Tree {
+    public static class Tree {
         Tree left;
         Tree right;
         String item;
@@ -91,20 +91,7 @@ public class BstMultiset extends RmitMultiset
         return origin;
     }
 
-    public void sorting(Tree original){
-        if(original==null)
-            return;
-        if(root!=null)
-            sorting(original.left);
-        if(root==null){
-            root=new Tree(original.item);
-            root.instance= original.instance;
-        }else
-            root = addNode(root,original);
 
-        sorting(original.right);
-
-    }
 
     public Tree removeNode(Tree deleteNode,Tree root){
         if(root==null)
@@ -137,22 +124,16 @@ public class BstMultiset extends RmitMultiset
 
     @Override
 	public void add(String item) {
-        root = addNode(root,new Tree(item));
+        root = addNode(root, new Tree(item));
     } // end of add()
 
     @Override
 	public int search(String item) {
-        int counter=1;
         Tree header= root;
         header = searchNode(header,item);
         if(header==null)
             return searchFailed;
-        while (header.LeftNode()!=null){
-            header=searchNode(header,item);
-            if(header!=null)
-                counter++;
-        }
-        return counter;
+        return header.instance;
     } // end of search()
 
 
@@ -193,16 +174,16 @@ public class BstMultiset extends RmitMultiset
                 break;
             case(2):
                 if(node.item.compareTo(lower)>=0 && node.item.compareTo(upper)<=0)
-                    stringBuilder.append(node.item+":"+node.instance+"\n");
+                    stringBuilder.append(node.item).append(":").append(node.instance).append("\n");
                 break;
 
         }
         order(node.right,func,instanceCount,lower,upper);
     }
-
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
 	public List<String> searchByInstance(int instanceCount) {
+
         list = new MyList();
         order(root,1,instanceCount,null,null);
         return list;
@@ -227,9 +208,8 @@ public class BstMultiset extends RmitMultiset
 
     } // end of removeOne()
 
-
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
 	public String print() {
         stringBuilder = new StringBuilder();
         printSort= new MyList();
@@ -244,7 +224,7 @@ public class BstMultiset extends RmitMultiset
                     printSort.set(j+1,temp);
                 }
         for(Tree t : printSort)
-            stringBuilder.append(t.item+":"+t.instance+"\n");
+            stringBuilder.append(t.item).append(":").append(t.instance).append("\n");
 
 
         return stringBuilder.toString();
@@ -253,11 +233,9 @@ public class BstMultiset extends RmitMultiset
 
     @Override
 	public String printRange(String lower, String upper) {
-
-        order(root,2,-1,lower,upper);
-        String str = stringBuilder.toString();
         stringBuilder = new StringBuilder();
-        return str;
+        order(root,2,-1,lower,upper);
+        return stringBuilder.toString();
     } // end of printRange()
 
 
